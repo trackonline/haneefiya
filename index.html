@@ -253,6 +253,9 @@
 </head>
 <body>
     <div id="nonePrint">
+   
+       
+       
             <div id="mainContent">
         <div id="searchField" class="container">
             <div>
@@ -453,9 +456,18 @@ function displayProgressCard(studentInfo, studentData) {
     let totalMarks = 0;
     let obtainedMarks = 0;
     let hasFailed = false; // Flag to check if the student failed
-
+    let hajar ="";
+    let rank = "";
     studentData.forEach((subject) => {
-        const grade = getGrade(subject.maxMark, subject.obtMark);
+        if(subject==="hajar"||subject==="rank"){
+            if(subject==="hajar"){
+            hajar = subject.obtMark+"/"+subject.maxMark;
+            }else{
+            rank = subject.obtMark+"/"+subject.maxMark;
+            }
+        }
+        if(subject!=="hajar"||subject!=="rank"){
+            const grade = getGrade(subject.maxMark, subject.obtMark);
         const isPassed = subject.obtMark >= 18;
         const statusIcon = isPassed ? 'P':'F';//'✔️' : '❌'; // Tick for pass, Cross for fail
         const rowStyle = isPassed ? "" : 'style="background-color: #ffcccc; font-weight: bold;"'; // Red background for fail
@@ -476,20 +488,30 @@ function displayProgressCard(studentInfo, studentData) {
 
         totalMarks += parseInt(subject.maxMark);
         obtainedMarks += parseInt(subject.obtMark);
+        }
+        
     });
 
     let percentage = ((obtainedMarks / totalMarks) * 100).toFixed(2);
 
     progressHTML += `
                 </table>
-                <p><strong>Total Marks:</strong> ${obtainedMarks} / ${totalMarks}</p>
-                <p><strong>Percentage:</strong> ${percentage}%</p>
+              <div style="display: flex; justify-content:space-between; font-size:16px; padding:20px;">
+        <div style="align-items: left;margin-left: 1px;">
+            <p><strong>Total Marks:</strong> ${obtainedMarks} / ${totalMarks}</p>
+            <p><strong>Percentage:</strong> ${percentage}%</p>
+        </div>
+        <div style="margin-right: 10px;">
+            <p><strong>Total Hajar:</strong> ${hajar}</p>
+            <p style="padding: 2px;background-color: #dbe4dd; width: fit-content; border-radius: 10%;"><strong>Rank:</strong> ${rank}%</p>
+        </div>
+        </div>
     `;
 
     if (hasFailed) {
-        progressHTML += `<div class="faild" style="color: red; font-weight: bold;">❌ You have failed the exam. Try again! ❌</div>`;
+        progressHTML += `<div class="faild" style="color: red;font-size:16px; font-weight: bold;"> You have failed the exam</div>`;
     } else {
-        progressHTML += `<div class="congratulations hideprint" style="color: green; font-weight: bold;">🎉 Congratulations! You have passed successfully! 🎉</div>`;
+        progressHTML += `<div class="congratulations hideprint" style=" font-weight: bold;font-size:16px;">🎉 Congratulations! You have passed successfully! 🎉</div>`;
     }
 
     progressHTML += `</div></div></div>`;
@@ -511,6 +533,7 @@ function getGrade(maxMark, obtMark) {
     return 'F';
 }
     </script>
-
+     
+ 
 </body>
 </html>
